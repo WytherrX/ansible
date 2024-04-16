@@ -1,0 +1,38 @@
+---
+# tasks file for roles/template-to-vm
+
+- name: Gathering datastores info
+  community.vmware.vmware_datastore_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ datacenter}}"
+  register: datastore_info
+
+- name: Finding the emptiest datastore
+  set_fact:
+    max_free_space: "{{ datastore_info.datastores | map(attribute='freeSpace') | max }}"
+
+- name: Finding the name of the emptiest datastore
+  set_fact:
+    emptiest_datastore: "{{ datastore_info.datastores | selectattr('freeSpace', 'match', max_free_space ) | map(attribute='name') | first }}"
+
+
+- name: Cloning the VM from the template
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    folder: "{{ folder }}"
+    datacenter: "{{ datacenter }}"
+    datastore: "{{ emptiest_datastore }}"
+    name: "{{ clone_vm }}"
+    template: "{{ template_vm }}"
+    state: poweredon
+  register: vm_clone
+
+- name: Your Virtual Machine
+  debug:
+    msg: Your VM was created in the datastore {{emptiest_datastore}}

@@ -1,0 +1,71 @@
+---
+# tasks file for choice-netbox
+- name: Gathering sites data from Netbox
+  set_fact:
+    nb_sites: "{{ query('netbox.netbox.nb_lookup', 'sites', api_endpoint=''~ url_netbox, token=''~ token_netbox) }}"
+
+- name: Cleaning up sites data
+  set_fact:
+   site_list: "{{ nb_sites| json_query('[].value.name') }}"
+
+- name: Where do you want to create your VM in Netbox ?
+  pause:
+    prompt:
+      "{{ ' - ' + site_list| join('\n - ') }}"
+  register: site_user
+
+- name: The site you chose
+  debug:
+    msg: "You chose the site : {{ site_user.user_input }}"
+
+- name: Gathering VLAN data from the site you chose
+  set_fact:
+    nb_vlans: "{{ query('netbox.netbox.nb_lookup', 'vlans', api_endpoint=''~ url_netbox, token=''~ token_netbox) }}"
+
+- name: Cleaning up VLAN data
+  set_fact:
+    vlan_nonull: "{{ nb_vlans | selectattr('value.site', '!=', None) }}"
+
+- set_fact:
+    vlan_id: "{{ vlan_nonull | selectattr('value.site.name', 'match', site_user.user_input) | map(attribute='value.vid') | map('string') }}"
+
+- set_fact:
+    vlan_name: "{{ vlan_nonull | selectattr('value.site.name', 'match', site_user.user_input) | map(attribute='value.name')}}"
+
+- set_fact:
+    vlan_list: []
+
+- set_fact:
+    vlan_list: "{{ vlan_list + ['(' + item.0 + ') - ' ~ '' ~ (item.1)] }}"
+  loop: "{{ vlan_id | zip(vlan_name) | list }}"
+
+- name: In which VLAN do you want to create your VM in Netbox ? (write only the VLAN ID)
+  pause:
+    prompt:
+      "{{ vlan_list | join('\n') }}"
+  register: vlan_user
+
+- name: The site you chose
+  debug:
+    msg: "You chose the VLAN : {{ vlan_user.user_input }}"
+
+- name: Gathering prefixes data from the VLAN you chose
+  set_fact:
+    nb_prefixes: "{{ query('netbox.netbox.nb_lookup', 'prefixes', api_endpoint=''~ url_netbox, token=''~ token_netbox) }}"
+
+- name: Cleaning up prefixes data
+  set_fact:
+    prefixes_nonull: "{{ nb_prefixes | selectattr('value.vlan', '!=', None) }}"
+
+- set_fact:
+    int_vlan_user: "{{ vlan_user.user_input | int }}"
+
+- set_fact:
+    prefixes_list: "{{ prefixes_nonull | selectattr('value.vlan.vid', 'match', int_vlan_user) | map(attribute='value.prefix') }}"
+
+- name: In which network do you want to create your VM in Netbox ?
+  pause:
+    prompt:
+      "{{ ' - ' + prefixes_list | join('\n - ') }}"
+  register: prefixvm
+

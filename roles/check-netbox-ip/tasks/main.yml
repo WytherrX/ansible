@@ -1,0 +1,22 @@
+---
+- name: Creating an IP to know if it's free
+  netbox.netbox.netbox_ip_address:
+    netbox_url: "{{ url_netbox}}"
+    netbox_token: "{{ token_netbox }}"
+    data:
+      prefix: "{{ prefixvm.user_input }}"
+    state: new
+  register: ip_info
+
+- name: Deleting the IP
+  netbox.netbox.netbox_ip_address:
+    netbox_url: "{{ url_netbox}}"
+    netbox_token: "{{ token_netbox }}"
+    data:
+      address: "{{ip_info.ip_address.address}}"
+    state: absent
+
+- name: Netbox info
+  debug:
+    msg: "Adresse IP libre : {{ip_info.ip_address.address}}"
+

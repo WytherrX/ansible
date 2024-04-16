@@ -1,0 +1,4 @@
+---
+# defaults file for roles/template-to-vm
+folder: /
+clone_vm: 'NewVM'
