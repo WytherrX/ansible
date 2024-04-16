@@ -18,10 +18,10 @@ It also require ``pynetbox`` which can be installed on Ubuntu (for example) by u
 Role Variables
 --------------
 
-| Variable         | Required | Type   | Default  | Comments                                                         |
-|------------------|----------|--------|----------|------------------------------------------------------------------|
-| url_netbox       | yes      | string | None     | URL of the Netbox Server you use (ex : 'https://netbox.test.com' |            |
-| token_netbox     | yes      | string | None     | Your NetBox Token                                                | 
+| Variable         | Required | Type   | Default  | Comments                                                          |
+|------------------|----------|--------|----------|-------------------------------------------------------------------|
+| url_netbox       | yes      | string | None     | URL of the Netbox Server you use (ex : 'https://netbox.test.com') |            
+| token_netbox     | yes      | string | None     | Your NetBox Token                                                 | 
 
 
 Example Playbook
