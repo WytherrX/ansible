@@ -69,3 +69,6 @@
       "{{ ' - ' + prefixes_list | join('\n - ') }}"
   register: prefixvm
 
+- set_fact:
+    prefix_f: "{{ prefixvm.user_input }}"
+

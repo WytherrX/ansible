@@ -4,7 +4,7 @@
     netbox_url: "{{ url_netbox}}"
     netbox_token: "{{ token_netbox }}"
     data:
-      prefix: "{{ prefixvm.user_input }}"
+      prefix: "{{ prefix_f }}"
     state: new
   register: ip_info
 

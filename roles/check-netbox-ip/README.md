@@ -1,38 +1,63 @@
-Role Name
+Permits to check the next available IP address in a Netbox Prefix
 =========
 
-A brief description of the role goes here.
+This role permits to find the next available IP address in a Prefix entered by the user in the format 10.10.10.10/24.
+It uses prompts to ask the user for the prefix.
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
-
-Role Variables
+The community.vmware collection is needed to use this role, you can check whether it is installed by running ``ansible-galaxy collection list``
+To install it, use : ``ansible-galaxy collection install netbox.netbox``
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+| Variable         | Required | Type   | Default  | Comments                                                         |
+|------------------|----------|--------|----------|------------------------------------------------------------------|
+| url_netbox       | yes      | string | None     | URL of the Netbox Server you use (ex : 'https://netbox.test.com')|
+| token_netbox     | yes      | string | None     | Your NetBox Token                                                | 
+| prefix_f         | yes      | string | None     | Prefix in which you wanna check for the next IP available        |
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+How to use it in your playbooks:
 
-    - hosts: servers
+    - hosts: localhost
+
       roles:
-         - { role: username.rolename, x: 42 }
+         - check-netbox-ip
 
 License
 -------
 
-BSD
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <https://unlicense.org>
+
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Wytherr 
