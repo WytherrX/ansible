@@ -10,6 +10,8 @@ Requirements
 
 The community.vmware collection is needed to use this role, you can check whether it is installed by running ``ansible-galaxy collection list``
 To install it, use : ``ansible-galaxy collection install netbox.netbox``
+
+Roles Variables
 --------------
 
 | Variable         | Required | Type   | Default  | Comments                                                         |
